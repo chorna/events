@@ -1,0 +1,26 @@
+version: '3'
+
+services:
+
+  postgres:
+    image: postgres:14-alpine
+    container_name: event_db
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_DB=eventsDB
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=password
+    ports:
+      - 5436:5432
+
+  django:
+    build: .
+    container_name: event_django
+    volumes:
+      - .:/app
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8100:8000
+    depends_on:
+      - postgres
