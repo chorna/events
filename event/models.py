@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 
@@ -13,9 +14,11 @@ class Room(models.Model):
 
 
 class Event(models.Model):
+    PUBLIC_CHOICE = 1
+    PRIVATE_CHOICE = 2
     TYPE_CHOICES = (
-        (1, 'Public'),
-        (2, 'Private'),
+        (PUBLIC_CHOICE, 'Public'),
+        (PRIVATE_CHOICE, 'Private'),
     )
     room = models.OneToOneField("Room", on_delete=models.CASCADE)
     type = models.IntegerField(choices=TYPE_CHOICES)
@@ -24,7 +27,7 @@ class Event(models.Model):
     date = models.DateField(
         auto_now=False,
         auto_now_add=False,
-        unique_for_date=True
+        unique=True
     )
 
     def __str__(self) -> str:
